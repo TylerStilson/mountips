@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mountips</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        
+        <div id="heroImage">
+            <img src="images/herobike.jpg" alt="homehero">
+            <div id="HeroText">zip through nature</div> 
+        </div>
+        <nav>
+            <h2 id="navHead">mountips</h2>
+            <div id="navMenu">
+                <button v-on:click="homeSwitch">home</button>
+                <button v-on:click="trailSwitch">new trail</button>
+            </div>
+        </nav>
+        <div id="diffCat">
+            <button v-on:click="begSwitch">beginner</button>
+            <button v-on:click="interSwitch">intermediate</button>
+            <button v-on:click="expertSwitch">expert</button>
+        </div>
+
+        <div v-if="begBool == true">
+            <h1>beginner trails</h1>
+        </div>
+
+        <div v-else-if="interBool == true">
+            <h1>intermediate trails</h1>
+        </div>
+
+        <div v-else-if="expertBool == true">
+            <h1>expert trails</h1>
+        </div>
+        
+        <div v-else id="trailFlexBox" >
+            <div v-for="trail in trails">
+                <div class="trailGrid">
+                    <div class="trailInfo">
+                        <h1>{{ trail.rideName }}</h1>
+                        <h3>{{trail.diff}}, {{trail.miles}} miles</h3>
+                        <h4>{{trail.elevation}}</h4>
+                        <p>{{trail.des}}</p>
+                    </div>
+                    <div class="trailMap" ref="map">
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        <!-- <iframe
+                            width="100%"
+                            height="100%"
+                            style="border:0"
+                            loading="lazy"
+                            allowfullscreen
+                            src= "https://www.google.com/maps/embed/v1/place?key=AIzaSyCmA-9Gbm7DvU4gBwVckME3qy-uiS5rmjI&q=SNew+Bearclaw+Poppy+Navajo+Trailhead+(Biking),Seattle+WA" >
+                            </iframe> -->
+                            
+
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+
+
+        
+        
+
+    </div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCmA-9Gbm7DvU4gBwVckME3qy-uiS5rmjI&libraries=&v=weekly"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
