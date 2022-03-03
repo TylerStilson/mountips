@@ -24,55 +24,113 @@
                 <button v-on:click="trailSwitch">new trail</button>
             </div>
         </nav>
-        <div id="diffCat">
-            <button v-on:click="begSwitch">beginner</button>
-            <button v-on:click="interSwitch">intermediate</button>
-            <button v-on:click="expertSwitch">expert</button>
-        </div>
 
-        <div v-if="begBool == true">
-            <h1>beginner trails</h1>
-        </div>
+        <div class="contentGrid" v-if="homeBool == true">
+            <div id="diffCat">
+                <button v-on:click="begSwitch">beginner</button>
+                <button v-on:click="interSwitch">intermediate</button>
+                <button v-on:click="expertSwitch">expert</button>
+            </div>
 
-        <div v-else-if="interBool == true">
-            <h1>intermediate trails</h1>
-        </div>
+            <div v-if="begBool == true" class="fHead">
+                <h1 class="filterHead">beginner trails</h1>
+            </div>
 
-        <div v-else-if="expertBool == true">
-            <h1>expert trails</h1>
-        </div>
+            <div v-else-if="interBool == true" class="fHead">
+                <h1 class="filterHead">intermediate trails</h1>
+            </div>
+
+            <div v-else-if="expertBool == true" class="fHead">
+                <h1 class="filterHead">expert trails</h1>
+            </div>
+            <div v-else class="fHead">
+                <h1 class="filterHead">all trails</h1>
+            </div>
         
-        <div v-else id="trailFlexBox" >
-            <div v-for="trail in trails">
-                <div class="trailGrid">
-                    <div class="trailInfo">
-                        <h1>{{ trail.rideName }}</h1>
-                        <h3>{{trail.diff}}, {{trail.miles}} miles</h3>
-                        <h4>{{trail.elevation}}</h4>
-                        <p>{{trail.des}}</p>
-                    </div>
-                    <div class="trailMap" ref="map">
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        <!-- <iframe
-                            width="100%"
-                            height="100%"
-                            style="border:0"
-                            loading="lazy"
-                            allowfullscreen
-                            src= "https://www.google.com/maps/embed/v1/place?key=AIzaSyCmA-9Gbm7DvU4gBwVckME3qy-uiS5rmjI&q=SNew+Bearclaw+Poppy+Navajo+Trailhead+(Biking),Seattle+WA" >
-                            </iframe> -->
+            <div id="trailFlexBox" >
+                <div v-for="trail in trails">
+                    <div class="trailGrid">
+                        <div class="trailInfo">
+                            <h1>{{ trail.rideName }}</h1>
+                            <h3>{{trail.diff}}, {{trail.miles}} miles</h3>
+                            <h4>{{trail.elevation}}</h4>
+                            <p>{{trail.des}}</p>
+                            <button class="zbuttons" v-on:click="deleteTrail(trail._id)">delete</button>
+                            <button class="zbuttons" v-on:click="updateSwitch(trail)">update</button>
+                        </div>
+                        <div v-show="homeBool == true" class="trailMap" ref="map"></div>
+                        <div id="addComDiv">
+                            <input id="ACA" type="text" v-model="commentAuthor" placeholder="author name">
+                            <input id="ACC" type="text" v-model="commentContent" placeholder="add new comment">
+                            <button id="ACButton" v-on:click="addComment(trail)">add</button>
+                        </div>
+                        <div class="commentDiv" >
+                            <div class="commentsBox" v-for="comment in trail.comments">
+                                <p>{{comment.author}}:</p>
+                                <p class="contentPad">{{comment.content}}</p>
+                                <!-- <button class="commentDeleteButton" v-on:click="deleteComment(comment)">delete</button> -->
+                            </div>
                             
-
+                        </div>
+                        
                     </div>
+
+                </div>
+            
+            </div>
+        </div>
+
+        <div class="contentGrid" v-else>
+            <div class="contentGrid" v-if="addTrailBool == true">
+                <h1 id="centerHead">create a trail</h1>
+                <div id="trailForm">
+                    <input type="text" v-model="rideName" placeholder="name of trail" v-bind:class="{ invalid: nameIsInvalid}"><br>
+                    <select type="text" v-model="diff" placeholder="difficulty" v-bind:class="{ invalid: diffIsInvalid}">
+                        <option value=beginner>beginner</option>
+                        <option value=intermediate>intermediate</option>
+                        <option value=expert>expert</option>
+                        </select>
+                        <input type="text" v-model="des" id="desBox" placeholder="description" v-bind:class="{ invalid: desIsInvalid}"><br>
+                        <input type="text" v-model="miles" placeholder="length in miles" v-bind:class="{ invalid: milesIsInvalid}"><br>
+                        <input type="text" v-model="elevation" placeholder="elevation ex: '844 up & 765 down'" v-bind:class="{ invalid: elevationIsInvalid}"><br>
+                        <input type="number" v-model="Glat" placeholder="latitude" v-bind:class="{ invalid: GlatIsInvalid}"><br>
+                        <input type="number" v-model="Glgn" placeholder="longitude" v-bind:class="{ invalid: GlgnIsInvalid}"><br>
+                        <button v-on:click="addTrail" id="addButton">add trail</button>
+
+                        <div v-if="success">
+                            <h3 class="getRidOfPadding">trail added successfully</h3>
+                        </div>
+
+                        <div v-if="!newTrailIsValid" class="errorsBox">
+                            there was a problem saving your trail:
+                            <ul>
+                                <li v-for="error in errors">{{error}}</li>
+                            </ul>
+                        </div>
                 </div>
             </div>
-            
+
+            <div class="contentGrid" v-if="editBool == true">
+                <h1 id="centerHead">edit trail</h1>
+                <div id="trailForm">
+                    <input type="text" v-model="rideName" placeholder=rideName v-bind:class="{ invalid: nameIsInvalid}"><br>
+                    <select type="text" v-model="diff" placeholder=dif v-bind:class="{ invalid: diffIsInvalid}">
+                        <option value=beginner>beginner</option>
+                        <option value=intermediate>intermediate</option>
+                        <option value=expert>expert</option>
+                        </select>
+                        <input type="text" v-model="des" id="desBox" placeholder=des v-bind:class="{ invalid: desIsInvalid}"><br>
+                        <input type="text" v-model="miles" placeholder=miles v-bind:class="{ invalid: milesIsInvalid}"><br>
+                        <input type="text" v-model="elevation" placeholder=elevation v-bind:class="{ invalid: elevationIsInvalid}"><br>
+                        <input type="number" v-model="Glat" placeholder=Glat v-bind:class="{ invalid: GlatIsInvalid}"><br>
+                        <input type="number" v-model="Glgn" placeholder=Glgn v-bind:class="{ invalid: GlgnIsInvalid}"><br>
+                        <button v-on:click="updateTrail()" id="editSubmitButton">update trail</button>
+
+                        
+                </div>
+
+            </div>
+
         </div>
         
 
