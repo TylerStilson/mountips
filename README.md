@@ -9,9 +9,9 @@ Attributes:
 * difficulty (string)
 * description (string)
 * likes (number)
-* comments(list of objects)
-&nbsp;&nbsp;&nbsp;&nbsp;  author (string)
-&nbsp;&nbsp;&nbsp;&nbsp;  content (string)
+* comments(list of objects) <br>
+&nbsp;&nbsp;&nbsp;&nbsp;  author (string) <br>
+&nbsp;&nbsp;&nbsp;&nbsp;  content (string) <br>
 * miles (number)
 * latitude (number)
 * longitude (number)
