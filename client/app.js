@@ -21,7 +21,7 @@ var app = new Vue({
         content: "",
         _id: "",
 
-        // googleSrc: "https://www.google.com/maps/embed/v1/place?key=AIzaSyCmA-9Gbm7DvU4gBwVckME3qy-uiS5rmjI&q=Space+Needle,Seattle+WA",
+        
 
         homeBool: true,
         trailBool: false,
